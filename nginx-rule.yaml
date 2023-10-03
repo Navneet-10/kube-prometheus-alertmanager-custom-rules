@@ -13,9 +13,9 @@ metadata:
   namespace: monitoring
 spec:
   groups:
-  - name: nginx.rules
+  - name: customalert.rules
     rules:
-    - alert: NginxPodStopped
+    - alert: NginxPodStopped-customalert
       expr: kube_pod_container_status_running{namespace="metrics", pod=~"nginx.*"} == 0
       for: 1m
       labels:
