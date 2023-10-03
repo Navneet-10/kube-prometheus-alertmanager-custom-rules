@@ -1,0 +1,26 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app.kubernetes.io/component: alert-router
+    app.kubernetes.io/instance: main
+    app.kubernetes.io/name: nginx
+    app.kubernetes.io/part-of: kube-prometheus
+    app.kubernetes.io/version: 0.26.0
+    prometheus: k8s
+    role: alert-rules
+  name: nginx-main-rules
+  namespace: monitoring
+spec:
+  groups:
+  - name: nginx.rules
+    rules:
+    - alert: NginxPodStopped
+      expr: kube_pod_container_status_running{namespace="metrics", pod=~"nginx.*"} == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "NGINX pod is not running"
+        description: "The NGINX pod in namespace 'your-namespace' is not running for more than 1 minutes."
+    
